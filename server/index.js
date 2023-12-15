@@ -1,11 +1,15 @@
 const express = require('express');
-const port = 5000;
+
 const app = express();
+const config_json = require('config');
+const port = config_json.get('server.port');
 
 const bodyParser = require('body-parser');
 
+
+// use cors for connect back and front
 const cors = require("cors")
-const whitelist = ["http://localhost:3000"]
+const whitelist = config_json.get('server.whitelist');
 
 const corsOptions = {
     origin: function (origin, callback) {
@@ -18,6 +22,8 @@ const corsOptions = {
     credentials: true,
 }
 app.use(cors(corsOptions))
+
+
 // Use Node.js body parsing middleware 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -82,29 +88,6 @@ app.get('/login', (request, response) => {
 })
 
 
-app.get('/countPokemons', (request, response) => {
-    pool.query(`SELECT count(*) as count FROM POKEMONS`, (error, result) => {
-        response.send(result[0])
-    })
-});
-
-app.get('/getPokemon', (request, response) => {
-    const id_pokemon = request?.query.pokemon;
-    try {
-        pool.query(`SELECT *  FROM POKEMONS where id=${id_pokemon}`, (error, result) => {
-            console.log(result[0])
-            let question = {
-                correctAnswer: result[0].id,
-                title: result[0].name
-            }
-            let data = []
-            response.send(result[0])
-        })
-    } catch (e) {
-        response.send({ status: "error", e: e })
-    }
-
-});
 app.get('/getQuestion', (request, response) => {
 
     const min = 1;
@@ -121,9 +104,6 @@ app.get('/getQuestion', (request, response) => {
                 }
                 data = []
                 data.push({id: result[0].id, src: result[0].img})
-                
-
-
                 pool.query(`SELECT *  FROM POKEMONS where id!=${rand}`, (error, result) => {
                     if (error) {
                         console.log(error)

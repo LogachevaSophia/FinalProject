@@ -1,5 +1,5 @@
 import './Card.css';
-import React, { useEffect, useState } from 'react'
+import React, {useState } from 'react'
 const Card = ({ question, changeIndex }) => {
 
     const [failClick, setFailClick] = useState({ id: null })
@@ -23,7 +23,6 @@ const Card = ({ question, changeIndex }) => {
                 ...prevState,
                 id: cur_id,
             }));
-            // elem.currentTarget.classList.toggle("fail")
         }
 
     }
@@ -45,9 +44,6 @@ const Card = ({ question, changeIndex }) => {
                 )}
             </div>
             <button disabled={next} onClick={handleClickNext}>Далее</button>
-
-
-
         </div>
     )
 

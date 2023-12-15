@@ -7,9 +7,10 @@ import Card from './components/Card/Card';
 
 function App() {
   const [question, setQuestion] = useState({})
+
   const apiUrl = 'http://192.168.0.104:5000'
   const getQuestion = async() =>{
-    axios.get(`${apiUrl}/getQuestion`).then((resp) => {
+    await axios.get(`${apiUrl}/getQuestion`).then((resp) => {
       console.log(resp)
       setQuestion(resp.data)
  
@@ -17,18 +18,12 @@ function App() {
   }
   useEffect(() => {
     getQuestion();
-    
-
   }, [])
 
 
-  const changeIndex = () => {
-    getQuestion();
-  }
-
   return (
     <div className="App">
-      <Card question={question} changeIndex={changeIndex} />
+      <Card question={question} changeIndex={getQuestion} />
     </div>
   );
 }
